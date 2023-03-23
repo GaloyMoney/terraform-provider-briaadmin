@@ -2,11 +2,10 @@ package admin
 
 import (
 	"context"
-	"crypto/tls"
 
 	adminv1 "github.com/GaloyMoney/terraform-provider-bria/bria/proto/admin"
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials"
+	"google.golang.org/grpc/metadata"
 )
 
 type AdminClient struct {
@@ -15,8 +14,15 @@ type AdminClient struct {
 }
 
 func NewAdminClient(endpoint string, apiKey string) (*AdminClient, error) {
-	creds := credentials.NewTLS(&tls.Config{})
-	opts := []grpc.DialOption{grpc.WithTransportCredentials(creds)}
+	opts := []grpc.DialOption{grpc.WithInsecure()}
+
+	// Inject API key as an HTTP header
+	interceptor := func(ctx context.Context, method string, req, reply interface{}, cc *grpc.ClientConn, invoker grpc.UnaryInvoker, opts ...grpc.CallOption) error {
+		newCtx := metadata.AppendToOutgoingContext(ctx, "x-bria-admin-api-key", apiKey)
+		return invoker(newCtx, method, req, reply, cc, opts...)
+	}
+	opts = append(opts, grpc.WithUnaryInterceptor(interceptor))
+
 	conn, err := grpc.Dial(endpoint, opts...)
 	if err != nil {
 		return nil, err

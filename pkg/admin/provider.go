@@ -82,7 +82,9 @@ func resourceBriaAdminAccountCreate(d *schema.ResourceData, meta interface{}) er
 		return fmt.Errorf("error creating Bria admin account: %w", err)
 	}
 
-	d.SetId(resp.Key.Id)
+	d.SetId(resp.Key.AccountId)
+	d.Set("api_key_id", resp.Key.Id)
+	d.Set("api_key", resp.Key.Key)
 
 	return resourceBriaAdminAccountRead(d, meta)
 }
@@ -93,12 +95,11 @@ func resourceBriaAdminAccountRead(d *schema.ResourceData, meta interface{}) erro
 }
 
 func resourceBriaAdminAccountUpdate(d *schema.ResourceData, meta interface{}) error {
-	// Implement the update function for the bria_admin_dummy resource
-	return resourceBriaAdminAccountRead(d, meta)
+	return fmt.Errorf("briaadmin_account resource does not support updates")
 }
 
 func resourceBriaAdminAccountDelete(d *schema.ResourceData, meta interface{}) error {
-	// Implement the delete function for the bria_admin_dummy resource
+	// Soft delete: just remove the account from the Terraform state
 	d.SetId("")
 	return nil
 }
