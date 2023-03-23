@@ -1,11 +1,11 @@
 terraform {
   required_providers {
     briaadmin = {
-      source = "galoymoney/briaadmin"
+      source  = "galoymoney/briaadmin"
       version = "0.1.0"
     }
     briaaccount = {
-      source = "galoymoney/briaaccount"
+      source  = "galoymoney/briaaccount"
       version = "0.1.0"
     }
   }
@@ -24,7 +24,12 @@ provider "briaaccount" {
 }
 
 resource "briaaccount_xpub" "lnd" {
-  name = "lnd"
-  xpub = "tpubDDEGUyCLufbxAfQruPHkhUcu55UdhXy7otfcEQG4wqYNnMfq9DbHPxWCqpEQQAJUDi8Bq45DjcukdDAXasKJ2G27iLsvpdoEL5nTRy5TJ2B"
+  name       = "lnd"
+  xpub       = "tpubDDEGUyCLufbxAfQruPHkhUcu55UdhXy7otfcEQG4wqYNnMfq9DbHPxWCqpEQQAJUDi8Bq45DjcukdDAXasKJ2G27iLsvpdoEL5nTRy5TJ2B"
   derivation = "m/64h/1h/0"
+}
+
+resource "briaaccount_wallet" "example" {
+  name  = "example"
+  xpubs = [briaaccount_xpub.lnd.id]
 }
