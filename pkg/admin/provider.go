@@ -1,6 +1,9 @@
 package admin
 
 import (
+	"fmt"
+
+	"github.com/GaloyMoney/terraform-provider-bria/bria/admin"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -22,58 +25,79 @@ func Provider() *schema.Provider {
 			},
 		},
 		ResourcesMap: map[string]*schema.Resource{
-			"briaadmin_dummy": resourceBriaAdminDummy(),
+			"briaadmin_account": resourceBriaAdminAccount(),
 		},
 
 		ConfigureFunc: providerConfigure,
 	}
 }
 
-type AdminClient struct {
-	Endpoint string
-	APIKey   string
-}
-
 func providerConfigure(d *schema.ResourceData) (interface{}, error) {
 	endpoint := d.Get("endpoint").(string)
 	apiKey := d.Get("api_key").(string)
 
-	return &AdminClient{
-		Endpoint: endpoint,
-		APIKey:   apiKey,
-	}, nil
+	return admin.NewAdminClient(endpoint, apiKey)
 }
 
-func resourceBriaAdminDummy() *schema.Resource {
+func resourceBriaAdminAccount() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceBriaAdminDummyCreate,
-		Read:   resourceBriaAdminDummyRead,
-		Update: resourceBriaAdminDummyUpdate,
-		Delete: resourceBriaAdminDummyDelete,
+		Create: resourceBriaAdminAccountCreate,
+		Read:   resourceBriaAdminAccountRead,
+		Update: resourceBriaAdminAccountUpdate,
+		Delete: resourceBriaAdminAccountDelete,
 
 		Schema: map[string]*schema.Schema{
-			// Add any required attributes for the bria_admin_dummy resource here
+			"name": {
+				Type:        schema.TypeString,
+				Required:    true,
+				Description: "The name of the account.",
+			},
+			"id": {
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The ID of the account.",
+			},
+			"api_key_id": {
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The ID of the API key associated with the account.",
+			},
+			"api_key": {
+				Type:        schema.TypeString,
+				Computed:    true,
+				Sensitive:   true,
+				Description: "The API key associated with the account.",
+			},
 		},
 	}
 }
 
-func resourceBriaAdminDummyCreate(d *schema.ResourceData, meta interface{}) error {
-	// Implement the create function for the bria_admin_dummy resource
-	d.SetId("example_id")
-	return resourceBriaAdminDummyRead(d, meta)
+func resourceBriaAdminAccountCreate(d *schema.ResourceData, meta interface{}) error {
+	client := meta.(*admin.AdminClient)
+
+	accountName := d.Get("name").(string)
+
+	resp, err := client.CreateAccount(accountName)
+	if err != nil {
+		return fmt.Errorf("error creating Bria admin account: %w", err)
+	}
+
+	d.SetId(resp.Key.Id)
+
+	return resourceBriaAdminAccountRead(d, meta)
 }
 
-func resourceBriaAdminDummyRead(d *schema.ResourceData, meta interface{}) error {
+func resourceBriaAdminAccountRead(d *schema.ResourceData, meta interface{}) error {
 	// Implement the read function for the bria_admin_dummy resource
 	return nil
 }
 
-func resourceBriaAdminDummyUpdate(d *schema.ResourceData, meta interface{}) error {
+func resourceBriaAdminAccountUpdate(d *schema.ResourceData, meta interface{}) error {
 	// Implement the update function for the bria_admin_dummy resource
-	return resourceBriaAdminDummyRead(d, meta)
+	return resourceBriaAdminAccountRead(d, meta)
 }
 
-func resourceBriaAdminDummyDelete(d *schema.ResourceData, meta interface{}) error {
+func resourceBriaAdminAccountDelete(d *schema.ResourceData, meta interface{}) error {
 	// Implement the delete function for the bria_admin_dummy resource
 	d.SetId("")
 	return nil

@@ -1,50 +1,47 @@
-package grpcclient
+package admin
 
 import (
 	"context"
-	"fmt"
+	"crypto/tls"
 
-	"github.com/GaloyMoney/terraform-provider-bria/services/bria_admin/v1"
+	adminv1 "github.com/GaloyMoney/terraform-provider-bria/bria/proto/admin"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials"
 )
 
-type Client struct {
+type AdminClient struct {
 	conn    *grpc.ClientConn
-	service v1.AdminServiceClient
+	service adminv1.AdminServiceClient
 }
 
-func NewClient(address, apiKey string) (*Client, error) {
-	conn, err := grpc.Dial(address, grpc.WithInsecure(), grpc.WithPerRPCCredentials(newCustomCreds(apiKey)))
+func NewAdminClient(endpoint string, apiKey string) (*AdminClient, error) {
+	creds := credentials.NewTLS(&tls.Config{})
+	opts := []grpc.DialOption{grpc.WithTransportCredentials(creds)}
+	conn, err := grpc.Dial(endpoint, opts...)
 	if err != nil {
-		return nil, fmt.Errorf("failed to connect to the gRPC server: %w", err)
+		return nil, err
 	}
 
-	return &Client{
+	client := adminv1.NewAdminServiceClient(conn)
+
+	return &AdminClient{
 		conn:    conn,
-		service: v1.NewAdminServiceClient(conn),
+		service: client,
 	}, nil
 }
 
-func (c *Client) Close() {
+func (c *AdminClient) Close() {
 	c.conn.Close()
 }
 
-func (c *Client) CreateAccount(ctx context.Context, name string) (*v1.AccountCreateResponse, error) {
-	request := &v1.AccountCreateRequest{Name: name}
-	response, err := c.service.AccountCreate(ctx, request)
-	if err != nil {
-		return nil, fmt.Errorf("failed to create account: %w", err)
+func (c *AdminClient) CreateAccount(name string) (*adminv1.AccountCreateResponse, error) {
+	req := &adminv1.AccountCreateRequest{
+		Name: name,
 	}
-	return response, nil
+	ctx := context.Background()
+	res, err := c.service.AccountCreate(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
 }
-
-type customCreds struct {
-	apiKey string
-}
-
-func newCustomCreds(apiKey string) *customCreds {
-	return &customCreds{apiKey: apiKey}
-}
-
-func (c *customCreds) GetRequestMetadata(ctx context.Context, uri ...
-
