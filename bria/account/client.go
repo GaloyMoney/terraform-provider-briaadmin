@@ -2,6 +2,8 @@ package account
 
 import (
 	"context"
+	"encoding/base64"
+	"fmt"
 
 	briav1 "github.com/GaloyMoney/terraform-provider-bria/bria/proto/api"
 	"google.golang.org/grpc"
@@ -54,18 +56,31 @@ func (c *AccountClient) ImportXpub(name, xpub, derivation string) (*briav1.Impor
 	return res, nil
 }
 
-// func (c *AccountClient) SetSignerConfig(xpubRef string, config *briav1.SetSignerConfigRequest_Config) (*briav1.SetSignerConfigResponse, error) {
-// 	req := &briav1.SetSignerConfigRequest{
-// 		XpubRef: xpubRef,
-// 		Config:  *config,
-// 	}
-// 	ctx := context.Background()
-// 	res, err := c.service.SetSignerConfig(ctx, req)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-// 	return res, nil
-// }
+func (c *AccountClient) CreateLndSignerConfig(xpub string, lndConfig []interface{}) error {
+	lnd := lndConfig[0].(map[string]interface{})
+
+	certBase64 := base64.StdEncoding.EncodeToString([]byte(lnd["cert"].(string)))
+
+	lndSignerConfig := &briav1.LndSignerConfig{
+		Endpoint:       lnd["endpoint"].(string),
+		CertBase64:     certBase64,
+		MacaroonBase64: lnd["macaroon_base64"].(string),
+	}
+
+	req := &briav1.SetSignerConfigRequest{
+		XpubRef: xpub,
+		Config: &briav1.SetSignerConfigRequest_Lnd{
+			Lnd: lndSignerConfig,
+		},
+	}
+
+	_, err := c.service.SetSignerConfig(context.Background(), req)
+	if err != nil {
+		return fmt.Errorf("error setting LND signer config: %w", err)
+	}
+
+	return nil
+}
 
 func (c *AccountClient) CreateWallet(name string, xpubRefs []string) (*briav1.CreateWalletResponse, error) {
 	req := &briav1.CreateWalletRequest{
