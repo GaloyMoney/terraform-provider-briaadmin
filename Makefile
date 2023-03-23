@@ -1,9 +1,11 @@
-.PHONY: build build-admin build-account run-admin run-account test
+.PHONY: gen-proto build build-admin testacc
 
 BIN_DIR := bin
 ADMIN_BINARY := $(BIN_DIR)/terraform-provider-briaadmin
 HOSTNAME=galoymoney
 
+PROTO_DIR := proto/vendor
+PROTO_OUTPUT_DIR := bria/proto
 
 version = 0.1.0
 os_arch = $(shell go env GOOS)_$(shell go env GOARCH)
@@ -14,7 +16,17 @@ fmt:
 	go mod tidy
 	terraform fmt --recursive
 
-build: build-admin build-regular
+gen-proto:
+	mkdir -p $(PROTO_OUTPUT_DIR)
+	protoc -I $(PROTO_DIR) \
+		--go_out=$(PROTO_OUTPUT_DIR) \
+		--go_opt=paths=source_relative \
+		--go-grpc_out=$(PROTO_OUTPUT_DIR) \
+		--go-grpc_opt=paths=source_relative \
+		$(PROTO_DIR)/admin/api.proto $(PROTO_DIR)/api/bria.proto
+
+
+build: gen-proto build-admin
 
 build-admin:
 	go build -o $(ADMIN_BINARY) cmd/admin-provider/main.go

@@ -1,0 +1,12 @@
+apiVersion: vendir.k14s.io/v1alpha1
+kind: Config
+directories:
+- path: ./proto
+  contents:
+  - path: vendor
+    git:
+      url: https://github.com/GaloyMoney/bria.git
+      ref: main
+    includePaths:
+    - proto/**/*
+    newRootPath: proto

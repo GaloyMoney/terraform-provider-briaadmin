@@ -10,6 +10,18 @@
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
+        buildDeps = with pkgs; [
+          go
+          gotools
+          gnumake
+        ];
+        devDeps = with pkgs;
+        buildDeps ++ [
+          protobuf
+          protoc-gen-go
+          protoc-gen-go-grpc
+          terraform
+        ];
       in
       rec {
         packages = {
@@ -24,11 +36,11 @@
             subPackages = [ "admin-provider" ];
 
             buildPhase = ''
-              go build -o $out/bin/${pname} ./admin-provider
+            go build -o $out/bin/${pname} ./admin-provider
             '';
 
             checkPhase = ''
-              go test ./... -v
+            go test ./... -v
             '';
           };
         };
@@ -36,19 +48,14 @@
         defaultPackage = packages.terraform-provider-bria;
 
         devShell = pkgs.mkShell {
-          buildInputs = [
-            pkgs.go
-            pkgs.gotools
-            pkgs.gnumake
-            pkgs.terraform
-          ];
+          buildInputs = devDeps;
 
           shellHook = ''
-            export PATH="$PATH:${pkgs.gnumake}/bin"
-            alias ll="ls -al"
-            alias tf=terraform
+          export PATH="$PATH:${pkgs.gnumake}/bin"
+          alias ll="ls -al"
+          alias tf=terraform
           '';
         };
       });
-}
+    }
 

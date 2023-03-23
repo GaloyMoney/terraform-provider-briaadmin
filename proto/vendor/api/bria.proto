@@ -1,0 +1,90 @@
+syntax = "proto3";
+package services.bria.v1;
+
+option go_package = "github.com/GaloyMoney/terraform-provider-bria/client/proto/briav1";
+
+service BriaService {
+  rpc ImportXpub (ImportXpubRequest) returns (ImportXpubResponse) {}
+  rpc SetSignerConfig (SetSignerConfigRequest) returns (SetSignerConfigResponse) {}
+  rpc CreateWallet (CreateWalletRequest) returns (CreateWalletResponse) {}
+  rpc GetWalletBalanceSummary (GetWalletBalanceSummaryRequest) returns (GetWalletBalanceSummaryResponse) {}
+  rpc NewAddress (NewAddressRequest) returns (NewAddressResponse) {}
+  rpc CreateBatchGroup (CreateBatchGroupRequest) returns (CreateBatchGroupResponse) {}
+  rpc QueuePayout (QueuePayoutRequest) returns (QueuePayoutResponse) {}
+}
+
+message ImportXpubRequest {
+  string name = 1;
+  string xpub = 2;
+  string derivation = 3;
+}
+
+message ImportXpubResponse {
+  string id = 1;
+}
+
+message SetSignerConfigRequest {
+  string xpub_ref = 1;
+  oneof config {
+    LndSignerConfig lnd = 2;
+  }
+}
+
+message LndSignerConfig {
+  string endpoint = 1;
+  string cert_base64 = 2;
+  string macaroon_base64 = 3;
+}
+
+message SetSignerConfigResponse {}
+
+message CreateWalletRequest {
+  string name = 1;
+  repeated string xpub_refs = 2;
+}
+
+message CreateWalletResponse {
+  string id = 1;
+}
+
+message NewAddressRequest {
+  string wallet_name = 1;
+}
+
+message NewAddressResponse {
+  string address = 1;
+}
+
+message GetWalletBalanceSummaryRequest {
+  string wallet_name = 1;
+}
+
+message GetWalletBalanceSummaryResponse {
+  uint64 pending_incoming = 1;
+  uint64 encumbered_fees = 2;
+  uint64 current_settled = 3;
+  uint64 encumbered_outgoing = 4;
+  uint64 pending_outgoing = 5;
+  uint64 pending_fees = 6;
+}
+
+message CreateBatchGroupRequest {
+  string name = 1;
+}
+
+message CreateBatchGroupResponse {
+  string id = 1;
+}
+
+message QueuePayoutRequest {
+  string wallet_name = 1;
+  string batch_group_name = 2;
+  oneof destination { 
+    string onchain_address = 3;
+  };
+  uint64 satoshis = 4;
+}
+
+message QueuePayoutResponse {
+  string id = 1;
+}
