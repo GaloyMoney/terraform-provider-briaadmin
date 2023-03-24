@@ -2,7 +2,12 @@ module github.com/GaloyMoney/terraform-provider-bria-admin
 
 go 1.20
 
-require github.com/hashicorp/terraform-plugin-sdk/v2 v2.26.1
+require (
+	github.com/hashicorp/terraform-plugin-docs v0.14.1
+	github.com/hashicorp/terraform-plugin-sdk/v2 v2.26.1
+	google.golang.org/grpc v1.51.0
+	google.golang.org/protobuf v1.28.1
+)
 
 require (
 	github.com/Masterminds/goutils v1.1.1 // indirect
@@ -30,7 +35,6 @@ require (
 	github.com/hashicorp/logutils v1.0.0 // indirect
 	github.com/hashicorp/terraform-exec v0.18.1 // indirect
 	github.com/hashicorp/terraform-json v0.16.0 // indirect
-	github.com/hashicorp/terraform-plugin-docs v0.14.1 // indirect
 	github.com/hashicorp/terraform-plugin-go v0.14.3 // indirect
 	github.com/hashicorp/terraform-plugin-log v0.8.0 // indirect
 	github.com/hashicorp/terraform-registry-address v0.1.0 // indirect
@@ -62,6 +66,4 @@ require (
 	golang.org/x/text v0.8.0 // indirect
 	google.golang.org/appengine v1.6.6 // indirect
 	google.golang.org/genproto v0.0.0-20200711021454-869866162049 // indirect
-	google.golang.org/grpc v1.51.0 // indirect
-	google.golang.org/protobuf v1.28.1 // indirect
 )
