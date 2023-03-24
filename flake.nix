@@ -14,6 +14,7 @@
           go
           gotools
           gnumake
+          tfplugindocs
         ];
         devDeps = with pkgs;
         buildDeps ++ [

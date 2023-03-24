@@ -1,9 +1,9 @@
-package admin
+package bria
 
 import (
 	"context"
 
-	adminv1 "github.com/GaloyMoney/terraform-provider-bria/bria/proto/admin"
+	adminv1 "github.com/GaloyMoney/terraform-provider-bria-admin/bria/proto/admin"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/metadata"
 )
