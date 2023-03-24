@@ -1,8 +1,8 @@
 .PHONY: gen-proto build build-admin testacc
 
-BIN_DIR := bin
-ADMIN_BINARY := $(BIN_DIR)/terraform-provider-briaadmin
-ACCOUNT_BINARY := $(BIN_DIR)/terraform-provider-briaaccount
+BIN_OUT_DIR := out
+ADMIN_BINARY := $(BIN_OUT_DIR)/terraform-provider-briaadmin
+ACCOUNT_BINARY := $(BIN_OUT_DIR)/terraform-provider-briaaccount
 HOSTNAME=galoymoney
 
 PROTO_DIR := proto/vendor
