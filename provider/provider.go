@@ -3,7 +3,7 @@ package provider
 import (
 	"fmt"
 
-	"github.com/GaloyMoney/terraform-provider-bria-admin/bria"
+	"github.com/GaloyMoney/terraform-provider-briaadmin/bria"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
