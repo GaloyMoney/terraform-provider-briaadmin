@@ -1,4 +1,4 @@
-.PHONY: gen-proto build  testacc
+.PHONY: gen-proto build testacc
 
 BIN_OUT_DIR := out
 BINARY := $(BIN_OUT_DIR)/terraform-provider-briaadmin
@@ -34,6 +34,8 @@ install: gen-proto build
 	mv ${BINARY} ~/.terraform.d/plugins/${provider_path}
 	rm -rf example/.terraform example/.terraform.lock.hcl
 
+clean:
+	rm -rf ~/.terraform.d/plugins/${provider_path}
 
 testacc:
 	TF_ACC=1 go test -v ./...

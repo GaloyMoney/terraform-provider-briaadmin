@@ -1,4 +1,4 @@
-module github.com/GaloyMoney/terraform-provider-bria-admin
+module github.com/GaloyMoney/terraform-provider-briaadmin
 
 go 1.20
 

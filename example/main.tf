@@ -4,10 +4,6 @@ terraform {
       source  = "galoymoney/briaadmin"
       version = "0.1.0"
     }
-    briaaccount = {
-      source  = "galoymoney/briaaccount"
-      version = "0.1.0"
-    }
   }
 }
 

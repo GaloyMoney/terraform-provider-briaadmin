@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/GaloyMoney/terraform-provider-bria-admin/provider"
+	"github.com/GaloyMoney/terraform-provider-briaadmin/provider"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/plugin"
 )
 
