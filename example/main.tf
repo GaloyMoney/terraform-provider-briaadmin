@@ -2,7 +2,7 @@ terraform {
   required_providers {
     briaadmin = {
       source  = "galoymoney/briaadmin"
-      version = "0.0.5"
+      version = "0.0.6"
     }
   }
 }

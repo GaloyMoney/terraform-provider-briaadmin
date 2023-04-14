@@ -41,12 +41,12 @@ func (c *AdminClient) Close() {
 	c.conn.Close()
 }
 
-func (c *AdminClient) CreateAccount(name string) (*adminv1.AccountCreateResponse, error) {
-	req := &adminv1.AccountCreateRequest{
+func (c *AdminClient) CreateAccount(name string) (*adminv1.CreateAccountResponse, error) {
+	req := &adminv1.CreateAccountRequest{
 		Name: name,
 	}
 	ctx := context.Background()
-	res, err := c.service.AccountCreate(ctx, req)
+	res, err := c.service.CreateAccount(ctx, req)
 	if err != nil {
 		return nil, err
 	}

@@ -20,7 +20,7 @@ const _ = grpc.SupportPackageIsVersion7
 
 const (
 	AdminService_Bootstrap_FullMethodName     = "/services.bria_admin.v1.AdminService/Bootstrap"
-	AdminService_AccountCreate_FullMethodName = "/services.bria_admin.v1.AdminService/AccountCreate"
+	AdminService_CreateAccount_FullMethodName = "/services.bria_admin.v1.AdminService/CreateAccount"
 	AdminService_ListAccounts_FullMethodName  = "/services.bria_admin.v1.AdminService/ListAccounts"
 )
 
@@ -29,7 +29,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type AdminServiceClient interface {
 	Bootstrap(ctx context.Context, in *BootstrapRequest, opts ...grpc.CallOption) (*BootstrapResponse, error)
-	AccountCreate(ctx context.Context, in *AccountCreateRequest, opts ...grpc.CallOption) (*AccountCreateResponse, error)
+	CreateAccount(ctx context.Context, in *CreateAccountRequest, opts ...grpc.CallOption) (*CreateAccountResponse, error)
 	ListAccounts(ctx context.Context, in *ListAccountsRequest, opts ...grpc.CallOption) (*ListAccountsResponse, error)
 }
 
@@ -50,9 +50,9 @@ func (c *adminServiceClient) Bootstrap(ctx context.Context, in *BootstrapRequest
 	return out, nil
 }
 
-func (c *adminServiceClient) AccountCreate(ctx context.Context, in *AccountCreateRequest, opts ...grpc.CallOption) (*AccountCreateResponse, error) {
-	out := new(AccountCreateResponse)
-	err := c.cc.Invoke(ctx, AdminService_AccountCreate_FullMethodName, in, out, opts...)
+func (c *adminServiceClient) CreateAccount(ctx context.Context, in *CreateAccountRequest, opts ...grpc.CallOption) (*CreateAccountResponse, error) {
+	out := new(CreateAccountResponse)
+	err := c.cc.Invoke(ctx, AdminService_CreateAccount_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -73,7 +73,7 @@ func (c *adminServiceClient) ListAccounts(ctx context.Context, in *ListAccountsR
 // for forward compatibility
 type AdminServiceServer interface {
 	Bootstrap(context.Context, *BootstrapRequest) (*BootstrapResponse, error)
-	AccountCreate(context.Context, *AccountCreateRequest) (*AccountCreateResponse, error)
+	CreateAccount(context.Context, *CreateAccountRequest) (*CreateAccountResponse, error)
 	ListAccounts(context.Context, *ListAccountsRequest) (*ListAccountsResponse, error)
 	mustEmbedUnimplementedAdminServiceServer()
 }
@@ -85,8 +85,8 @@ type UnimplementedAdminServiceServer struct {
 func (UnimplementedAdminServiceServer) Bootstrap(context.Context, *BootstrapRequest) (*BootstrapResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Bootstrap not implemented")
 }
-func (UnimplementedAdminServiceServer) AccountCreate(context.Context, *AccountCreateRequest) (*AccountCreateResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method AccountCreate not implemented")
+func (UnimplementedAdminServiceServer) CreateAccount(context.Context, *CreateAccountRequest) (*CreateAccountResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateAccount not implemented")
 }
 func (UnimplementedAdminServiceServer) ListAccounts(context.Context, *ListAccountsRequest) (*ListAccountsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListAccounts not implemented")
@@ -122,20 +122,20 @@ func _AdminService_Bootstrap_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
-func _AdminService_AccountCreate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(AccountCreateRequest)
+func _AdminService_CreateAccount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateAccountRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AdminServiceServer).AccountCreate(ctx, in)
+		return srv.(AdminServiceServer).CreateAccount(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: AdminService_AccountCreate_FullMethodName,
+		FullMethod: AdminService_CreateAccount_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AdminServiceServer).AccountCreate(ctx, req.(*AccountCreateRequest))
+		return srv.(AdminServiceServer).CreateAccount(ctx, req.(*CreateAccountRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -170,8 +170,8 @@ var AdminService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _AdminService_Bootstrap_Handler,
 		},
 		{
-			MethodName: "AccountCreate",
-			Handler:    _AdminService_AccountCreate_Handler,
+			MethodName: "CreateAccount",
+			Handler:    _AdminService_CreateAccount_Handler,
 		},
 		{
 			MethodName: "ListAccounts",

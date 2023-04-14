@@ -2,8 +2,10 @@ apiVersion: vendir.k14s.io/v1alpha1
 directories:
 - contents:
   - git:
-      commitTitle: 'chore: add go_package to proto files (hack)'
-      sha: eaa9779243053538ff9fb98617505735d3e622f9
+      commitTitle: 'chore: rename AccountCreate -> CreateAccount'
+      sha: dc0ca1bf88a3a6bdeabafc107dac35c9cf65193a
+      tags:
+      - 0.0.5-3-gdc0ca1b
     path: vendor
   path: ./proto
 kind: LockConfig
