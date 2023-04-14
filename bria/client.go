@@ -2,6 +2,7 @@ package bria
 
 import (
 	"context"
+	"fmt"
 
 	adminv1 "github.com/GaloyMoney/terraform-provider-briaadmin/bria/proto/admin"
 	"google.golang.org/grpc"
@@ -50,4 +51,24 @@ func (c *AdminClient) CreateAccount(name string) (*adminv1.AccountCreateResponse
 		return nil, err
 	}
 	return res, nil
+}
+
+func (c *AdminClient) ReadAccount(accountID string) (*adminv1.Account, error) {
+	ctx := context.Background()
+
+	listAccountsRequest := &adminv1.ListAccountsRequest{}
+	listAccountsResponse, err := c.service.ListAccounts(ctx, listAccountsRequest)
+	if err != nil {
+		return nil, fmt.Errorf("error fetching accounts: %w", err)
+	}
+
+	var foundAccount *adminv1.Account
+	for _, account := range listAccountsResponse.Accounts {
+		if account.Id == accountID {
+			foundAccount = account
+			break
+		}
+	}
+
+	return foundAccount, nil
 }

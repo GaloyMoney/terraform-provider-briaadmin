@@ -7,7 +7,7 @@ HOSTNAME=galoymoney
 PROTO_DIR := proto/vendor
 PROTO_OUTPUT_DIR := bria/proto
 
-version = 0.1.0
+version = 0.0.5
 os_arch = $(shell go env GOOS)_$(shell go env GOARCH)
 provider_path = registry.terraform.io/galoymoney/briaadmin/$(version)/$(os_arch)/
 

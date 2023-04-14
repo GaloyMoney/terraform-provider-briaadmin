@@ -21,6 +21,7 @@ const _ = grpc.SupportPackageIsVersion7
 const (
 	AdminService_Bootstrap_FullMethodName     = "/services.bria_admin.v1.AdminService/Bootstrap"
 	AdminService_AccountCreate_FullMethodName = "/services.bria_admin.v1.AdminService/AccountCreate"
+	AdminService_ListAccounts_FullMethodName  = "/services.bria_admin.v1.AdminService/ListAccounts"
 )
 
 // AdminServiceClient is the client API for AdminService service.
@@ -29,6 +30,7 @@ const (
 type AdminServiceClient interface {
 	Bootstrap(ctx context.Context, in *BootstrapRequest, opts ...grpc.CallOption) (*BootstrapResponse, error)
 	AccountCreate(ctx context.Context, in *AccountCreateRequest, opts ...grpc.CallOption) (*AccountCreateResponse, error)
+	ListAccounts(ctx context.Context, in *ListAccountsRequest, opts ...grpc.CallOption) (*ListAccountsResponse, error)
 }
 
 type adminServiceClient struct {
@@ -57,12 +59,22 @@ func (c *adminServiceClient) AccountCreate(ctx context.Context, in *AccountCreat
 	return out, nil
 }
 
+func (c *adminServiceClient) ListAccounts(ctx context.Context, in *ListAccountsRequest, opts ...grpc.CallOption) (*ListAccountsResponse, error) {
+	out := new(ListAccountsResponse)
+	err := c.cc.Invoke(ctx, AdminService_ListAccounts_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // AdminServiceServer is the server API for AdminService service.
 // All implementations must embed UnimplementedAdminServiceServer
 // for forward compatibility
 type AdminServiceServer interface {
 	Bootstrap(context.Context, *BootstrapRequest) (*BootstrapResponse, error)
 	AccountCreate(context.Context, *AccountCreateRequest) (*AccountCreateResponse, error)
+	ListAccounts(context.Context, *ListAccountsRequest) (*ListAccountsResponse, error)
 	mustEmbedUnimplementedAdminServiceServer()
 }
 
@@ -75,6 +87,9 @@ func (UnimplementedAdminServiceServer) Bootstrap(context.Context, *BootstrapRequ
 }
 func (UnimplementedAdminServiceServer) AccountCreate(context.Context, *AccountCreateRequest) (*AccountCreateResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AccountCreate not implemented")
+}
+func (UnimplementedAdminServiceServer) ListAccounts(context.Context, *ListAccountsRequest) (*ListAccountsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListAccounts not implemented")
 }
 func (UnimplementedAdminServiceServer) mustEmbedUnimplementedAdminServiceServer() {}
 
@@ -125,6 +140,24 @@ func _AdminService_AccountCreate_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _AdminService_ListAccounts_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListAccountsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AdminServiceServer).ListAccounts(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AdminService_ListAccounts_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AdminServiceServer).ListAccounts(ctx, req.(*ListAccountsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // AdminService_ServiceDesc is the grpc.ServiceDesc for AdminService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -139,6 +172,10 @@ var AdminService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "AccountCreate",
 			Handler:    _AdminService_AccountCreate_Handler,
+		},
+		{
+			MethodName: "ListAccounts",
+			Handler:    _AdminService_ListAccounts_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

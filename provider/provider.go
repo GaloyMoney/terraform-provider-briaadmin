@@ -90,7 +90,24 @@ func resourceBriaAdminAccountCreate(d *schema.ResourceData, meta interface{}) er
 }
 
 func resourceBriaAdminAccountRead(d *schema.ResourceData, meta interface{}) error {
-	// Implement the read function for the bria_admin_dummy resource
+	client := meta.(*bria.AdminClient)
+
+	accountID := d.Id()
+
+	account, err := client.ReadAccount(accountID)
+	if err != nil {
+		return fmt.Errorf("error reading Bria admin account: %w", err)
+	}
+
+	if account == nil {
+		// Account was deleted
+		d.SetId("")
+		return nil
+	}
+
+	d.Set("name", account.Name)
+	d.Set("id", account.Id)
+
 	return nil
 }
 
