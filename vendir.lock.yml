@@ -2,10 +2,10 @@ apiVersion: vendir.k14s.io/v1alpha1
 directories:
 - contents:
   - git:
-      commitTitle: 'chore: expose create profile api key'
-      sha: 2a6c72f2ec211c972b05964f23c5938b6cf2ed7d
+      commitTitle: 'ci(release): release version 0.0.7'
+      sha: 1abbb34bcbf6288d47ab89fa44061b3a460c5753
       tags:
-      - 0.0.6-5-g2a6c72f
+      - 0.0.7
     path: vendor
   path: ./proto
 kind: LockConfig
