@@ -57,10 +57,10 @@ func resourceBriaAdminAccount() *schema.Resource {
 				Computed:    true,
 				Description: "The ID of the account.",
 			},
-			"api_key_id": {
+			"profile_id": {
 				Type:        schema.TypeString,
 				Computed:    true,
-				Description: "The ID of the API key associated with the account.",
+				Description: "The ID of the default profile associated with the account.",
 			},
 			"api_key": {
 				Type:        schema.TypeString,
@@ -83,7 +83,7 @@ func resourceBriaAdminAccountCreate(d *schema.ResourceData, meta interface{}) er
 	}
 
 	d.SetId(resp.Key.AccountId)
-	d.Set("api_key_id", resp.Key.Id)
+	d.Set("profile_id", resp.Key.ProfileId)
 	d.Set("api_key", resp.Key.Key)
 
 	return resourceBriaAdminAccountRead(d, meta)

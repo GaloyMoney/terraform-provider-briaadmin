@@ -22,7 +22,7 @@ description: |-
 ### Read-Only
 
 - `api_key` (String, Sensitive) The API key associated with the account.
-- `api_key_id` (String) The ID of the API key associated with the account.
 - `id` (String) The ID of the account.
+- `profile_id` (String) The ID of the default profile associated with the account.
 
 

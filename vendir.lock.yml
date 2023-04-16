@@ -2,10 +2,10 @@ apiVersion: vendir.k14s.io/v1alpha1
 directories:
 - contents:
   - git:
-      commitTitle: 'chore: rename AccountCreate -> CreateAccount'
-      sha: dc0ca1bf88a3a6bdeabafc107dac35c9cf65193a
+      commitTitle: 'chore: expose create profile api key'
+      sha: 2a6c72f2ec211c972b05964f23c5938b6cf2ed7d
       tags:
-      - 0.0.5-3-gdc0ca1b
+      - 0.0.6-5-g2a6c72f
     path: vendor
   path: ./proto
 kind: LockConfig
